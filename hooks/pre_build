@@ -1,0 +1,4 @@
+#!/bin/sh
+
+make vendor WITH_DOCKER=1
+make build WITH_DOCKER=1
