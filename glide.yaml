@@ -1,0 +1,10 @@
+package: github.com/oursky/kubernetes-github-authn
+import:
+- package: github.com/google/go-github
+  subpackages:
+  - github
+- package: golang.org/x/oauth2
+- package: k8s.io/client-go
+  version: ~2.0.0
+  subpackages:
+  - pkg/apis/authentication/v1beta1

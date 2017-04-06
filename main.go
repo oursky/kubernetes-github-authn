@@ -3,10 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
+	"context"
 	"encoding/json"
 	"golang.org/x/oauth2"
-	authentication "k8s.io/kubernetes/pkg/apis/authentication/v1beta1"
 	"github.com/google/go-github/github"
+	authentication "k8s.io/client-go/pkg/apis/authentication/v1beta1"
 )
 
 func main() {
@@ -33,7 +34,7 @@ func main() {
 		)
 		tc := oauth2.NewClient(oauth2.NoContext, ts)
 		client := github.NewClient(tc)
-		user, _, err := client.Users.Get("")
+		user, _, err := client.Users.Get(context.Background(), "")
 		if err != nil {
 			log.Println("[Error]", err.Error())
 			w.WriteHeader(http.StatusUnauthorized)
