@@ -1,17 +1,18 @@
 package main
 
 import (
-	"log"
-	"net/http"
 	"context"
 	"encoding/json"
-	"golang.org/x/oauth2"
+	"log"
+	"net/http"
+
 	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
 	authentication "k8s.io/client-go/pkg/apis/authentication/v1beta1"
 )
 
 func main() {
-	http.HandleFunc("/authenticate", func(w http.ResponseWriter, r *http.Request){
+	http.HandleFunc("/authenticate", func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
 		var tr authentication.TokenReview
 		err := decoder.Decode(&tr)
@@ -20,7 +21,7 @@ func main() {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(map[string]interface{}{
 				"apiVersion": "authentication.k8s.io/v1beta1",
-				"kind": "TokenReview",
+				"kind":       "TokenReview",
 				"status": authentication.TokenReviewStatus{
 					Authenticated: false,
 				},
@@ -40,7 +41,7 @@ func main() {
 			w.WriteHeader(http.StatusUnauthorized)
 			json.NewEncoder(w).Encode(map[string]interface{}{
 				"apiVersion": "authentication.k8s.io/v1beta1",
-				"kind": "TokenReview",
+				"kind":       "TokenReview",
 				"status": authentication.TokenReviewStatus{
 					Authenticated: false,
 				},
@@ -54,13 +55,13 @@ func main() {
 			Authenticated: true,
 			User: authentication.UserInfo{
 				Username: *user.Login,
-				UID: *user.Login,
+				UID:      *user.Login,
 			},
 		}
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"apiVersion": "authentication.k8s.io/v1beta1",
-			"kind": "TokenReview",
-			"status": trs,
+			"kind":       "TokenReview",
+			"status":     trs,
 		})
 	})
 	log.Fatal(http.ListenAndServe(":3000", nil))
