@@ -22,7 +22,7 @@ authenticator on your Kubernetes master using host networking so that the
 apiserver can access the authenticator through the loopback interface.
 
 ```
-kubectl create -f https://raw.github.com/oursky/kubernetes-github-authn/blob/master/manifests/github-authn.yaml
+kubectl create -f https://raw.githubusercontent.com/oursky/kubernetes-github-authn/master/manifests/github-authn.yaml
 ```
 
 Confirm that the authenticator is running:
@@ -60,7 +60,7 @@ access to the project `project1`. First of all, we need to define a new role
 called `admin` which can control all resources.
 
 ```
-kubectl create -f https://raw.github.com/oursky/kubernetes-github-authn/blob/master/manifests/admin-cluster-role.yaml
+kubectl create -f https://raw.githubusercontent.com/oursky/kubernetes-github-authn/master/manifests/admin-cluster-role.yaml
 ```
 
 We need to assign `johndoe` to this `admin` role so that he has control to
