@@ -18,6 +18,7 @@ spec:
     spec:
       containers:
       - image: oursky/kubernetes-github-authn
+        name: kubernetes-github-authn
         ports:
         - containerPort: 3000
           hostPort: 3000
