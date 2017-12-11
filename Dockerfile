@@ -1,6 +1,4 @@
-FROM alpine:3.4
-
-RUN apk --no-cache --update add ca-certificates
+FROM centos:7
 
 COPY _output/main /boot
 

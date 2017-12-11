@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: kube-system
+  name: auth-config
+data:
+  token-webhook-config.json: |+
+    {
+    "kind": "Config",
+    "apiVersion": "v1",
+    "preferences": {},
+    "clusters": [
+        {
+            "name": "github-authn",
+            "cluster": {
+                "server": "http://localhost:3000/authenticate"
+            }
+        }
+    ],
+    "users": [
+        {
+            "name": "authn-apiserver",
+            "user": {
+                "token": "secret"
+            }
+        }
+    ],
+    "contexts": [
+        {
+            "name": "webhook",
+            "context": {
+                "cluster": "github-authn",
+                "user": "authn-apiserver"
+            }
+        }
+    ],
+    "current-context": "webhook"
+    }

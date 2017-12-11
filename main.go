@@ -1,13 +1,11 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"log"
 	"net/http"
 
-	"github.com/google/go-github/github"
-	"golang.org/x/oauth2"
+	"github.com/xanzy/go-gitlab"
 	authentication "k8s.io/client-go/pkg/apis/authentication/v1beta1"
 )
 
@@ -30,12 +28,10 @@ func main() {
 		}
 
 		// Check User
-		ts := oauth2.StaticTokenSource(
-			&oauth2.Token{AccessToken: tr.Spec.Token},
-		)
-		tc := oauth2.NewClient(oauth2.NoContext, ts)
-		client := github.NewClient(tc)
-		user, _, err := client.Users.Get(context.Background(), "")
+		git := gitlab.NewClient(nil, tr.Spec.Token)
+		git.SetBaseURL("https://gitlabe1.ext.net.nokia.com/api/v4")
+		user, _, err := git.Users.CurrentUser(nil)
+
 		if err != nil {
 			log.Println("[Error]", err.Error())
 			w.WriteHeader(http.StatusUnauthorized)
@@ -49,13 +45,13 @@ func main() {
 			return
 		}
 
-		log.Printf("[Success] login as %s", *user.Login)
+		log.Printf("[Success] login as %s", user.Username)
 		w.WriteHeader(http.StatusOK)
 		trs := authentication.TokenReviewStatus{
 			Authenticated: true,
 			User: authentication.UserInfo{
-				Username: *user.Login,
-				UID:      *user.Login,
+				Username: user.Username,
+				UID:      user.Username,
 			},
 		}
 		json.NewEncoder(w).Encode(map[string]interface{}{

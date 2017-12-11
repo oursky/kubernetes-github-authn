@@ -1,4 +1,4 @@
-REPO := oursky/kubernetes-github-authn
+REPO := nwik/kubernetes-gitlab-authn
 IMAGE_NAME := $(REPO)
 GO_SRC_PATH := /go/src/github.com/$(REPO)
 PORT := 8080
@@ -25,8 +25,11 @@ clean:
 
 .PHONY: docker-build
 docker-build:
-	WITH_DOCKER=1 make build
-	docker build -t $(IMAGE_NAME) .
+	#WITH_DOCKER=1 make build
+	docker build --build-arg=https_proxy=${http_proxy} --build-arg=http_proxy=${http_proxy} -t $(IMAGE_NAME) .
+
+docker-push:
+	docker push $(IMAGE_NAME)
 
 .PHONY: docker-run
 docker-run:

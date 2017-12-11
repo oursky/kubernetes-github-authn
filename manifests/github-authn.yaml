@@ -2,23 +2,23 @@ apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   labels:
-    k8s-app: github-authn
-  name: github-authn
+    k8s-app: gitlab-authn
+  name: gitlab-authn
   namespace: kube-system
 spec:
   selector:
     matchLabels:
-      k8s-app: github-authn
+      k8s-app: gitlab-authn
   template:
     metadata:
       labels:
-        k8s-app: github-authn
+        k8s-app: gitlab-authn
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:
       containers:
-      - image: oursky/kubernetes-github-authn
-        name: kubernetes-github-authn
+      - image: nwik/kubernetes-gitlab-authn
+        name: kubernetes-gitlab-authn
         ports:
         - containerPort: 3000
           hostPort: 3000
