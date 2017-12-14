@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
@@ -65,8 +66,14 @@ func main() {
 			})
 			return
 		}
+		os.Getenv("GITHUB_ORG")
 		var groups []string
 		for _, team := range teams_results {
+			if org != "" {
+				if !(strings.EqualFold(org, *team.Organization.Login)) {
+					continue
+				}
+			}
 			groups = append(teams, *team.Name)
 		}
 
