@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
@@ -66,7 +67,7 @@ func main() {
 			})
 			return
 		}
-		os.Getenv("GITHUB_ORG")
+		org := os.Getenv("GITHUB_ORG")
 		var groups []string
 		for _, team := range teams_results {
 			if org != "" {
@@ -74,7 +75,7 @@ func main() {
 					continue
 				}
 			}
-			groups = append(teams, *team.Name)
+			groups = append(groups, *team.Name)
 		}
 
 		log.Printf("[Success] login as %s", *user.Login)
