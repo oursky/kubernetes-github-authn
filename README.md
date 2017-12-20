@@ -79,6 +79,26 @@ a `RoleBinding`:
 kubectl create clusterrolebinding johndoe-admin-binding --clusterrole=admin --user=johndoe
 ```
 
+### Groups
+RBAC supports assigning permissions to users via a group. The authenticator will 
+map all Github Organization Teams to groups in Kubernetes. See the [team example
+](/manifests/operations-cluster-role.yaml) for an example of how assign these
+permissions.
+
+If you plan to use Groups, make sure you set the `GITHUB_ORG` environment variable
+on your [DaemonSet manifest](manifests/github-authn.yaml) before applying it. Simply
+uncomment the `name` and `value` for `GITHUB_ORG` and set the `value` to your Github
+Organization name. For example, Oursky's github Organization URL is https://github.com/oursky,
+and we would set the manifest to read:
+
+```
+...
+        env:
+        - name: GITHUB_ORG
+          value: oursky
+...
+```
+
 Read the [Kubernetes
 documentation](https://kubernetes.io/docs/admin/authorization/rbac/) to learn
 more about how to configure your apiserver to use RBAC.
