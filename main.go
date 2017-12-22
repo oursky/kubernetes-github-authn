@@ -4,12 +4,16 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 
-	"github.com/xanzy/go-gitlab"
+	gitlab "github.com/xanzy/go-gitlab"
+
 	authentication "k8s.io/client-go/pkg/apis/authentication/v1beta1"
 )
 
 func main() {
+	//https://gitlab.com/api/v4
+	gitlabUrl := os.Getenv("GITLAB_URL")
 	http.HandleFunc("/authenticate", func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
 		var tr authentication.TokenReview
@@ -26,10 +30,9 @@ func main() {
 			})
 			return
 		}
-
 		// Check User
 		git := gitlab.NewClient(nil, tr.Spec.Token)
-		git.SetBaseURL("https://gitlabe1.ext.net.nokia.com/api/v4")
+		git.SetBaseURL(gitlabUrl)
 		user, _, err := git.Users.CurrentUser(nil)
 
 		if err != nil {

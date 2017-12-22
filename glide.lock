@@ -1,5 +1,5 @@
-hash: 6f6f645db3a4423c4835188db4ff1a4c8ca43c2a7a1e0a0b651706938c85a54d
-updated: 2017-04-06T10:31:09.042561872+08:00
+hash: 080350d5d64d756a126d88963468ef6ea6e6bc39c495159335fb35c91598b706
+updated: 2017-12-22T07:48:51.706061355+02:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
@@ -32,10 +32,6 @@ imports:
   - sortkeys
 - name: github.com/golang/glog
   version: 44145f04b68cf362d9c4df2182967c2275eaefed
-- name: github.com/golang/protobuf
-  version: 8616e8ee5e20a1704615e6c8d7afcdac06087a67
-  subpackages:
-  - proto
 - name: github.com/google/go-github
   version: 12363ffc10018c93407ebf303040586d55957271
   subpackages:
@@ -64,18 +60,19 @@ imports:
   version: f1f1a805ed361a0e078bb537e4ea78cd37dcf065
   subpackages:
   - codec
+- name: github.com/xanzy/go-gitlab
+  version: 732762722e18105e1f8bdc9a8336a8a29ddf1744
 - name: golang.org/x/net
   version: e90d6d0afc4c315a0d87a568ae68577cc15149a0
   subpackages:
   - context
+  - context/ctxhttp
   - http2
   - http2/hpack
   - idna
   - lex/httplex
 - name: golang.org/x/oauth2
   version: 7fdf09982454086d5570c7db3e11f360194830ca
-  subpackages:
-  - internal
 - name: golang.org/x/text
   version: 2910a502d2bf9e43193af9d68ca516529614eed3
   subpackages:
@@ -89,18 +86,6 @@ imports:
   - unicode/bidi
   - unicode/norm
   - width
-- name: google.golang.org/appengine
-  version: 4f7eeb5305a4ba1966344836ba4af9996b7b4e05
-  subpackages:
-  - internal
-  - internal/app_identity
-  - internal/base
-  - internal/datastore
-  - internal/log
-  - internal/modules
-  - internal/remote_api
-  - internal/urlfetch
-  - urlfetch
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
