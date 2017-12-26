@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
@@ -30,12 +32,13 @@ func main() {
 		}
 
 		// Check User
+		ctx := context.Background()
 		ts := oauth2.StaticTokenSource(
 			&oauth2.Token{AccessToken: tr.Spec.Token},
 		)
 		tc := oauth2.NewClient(oauth2.NoContext, ts)
 		client := github.NewClient(tc)
-		user, _, err := client.Users.Get(context.Background(), "")
+		user, _, err := client.Users.Get(ctx, "")
 		if err != nil {
 			log.Println("[Error]", err.Error())
 			w.WriteHeader(http.StatusUnauthorized)
@@ -49,6 +52,37 @@ func main() {
 			return
 		}
 
+		// Gather teams
+		opt := &github.ListOptions{PerPage: 1000}
+		teams_results, _, err := client.Organizations.ListUserTeams(ctx, opt)
+		if err != nil {
+			log.Println("[Error]", err.Error())
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"apiVersion": "authentication.k8s.io/v1beta1",
+				"kind":       "TokenReview",
+				"status": authentication.TokenReviewStatus{
+					Authenticated: false,
+				},
+			})
+			return
+		}
+		org := os.Getenv("GITHUB_ORG")
+		var groups []string
+		for _, team := range teams_results {
+			if org != "" {
+				if !(strings.EqualFold(org, *team.Organization.Login)) {
+					continue
+				}
+			}
+			groups = append(groups, *team.Name)
+
+			// Handle child teams
+			if team.Parent != nil {
+				groups = append(groups, *team.Parent.Name)
+			}
+		}
+
 		log.Printf("[Success] login as %s", *user.Login)
 		w.WriteHeader(http.StatusOK)
 		trs := authentication.TokenReviewStatus{
@@ -56,6 +90,7 @@ func main() {
 			User: authentication.UserInfo{
 				Username: *user.Login,
 				UID:      *user.Login,
+				Groups:   groups,
 			},
 		}
 		json.NewEncoder(w).Encode(map[string]interface{}{

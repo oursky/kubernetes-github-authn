@@ -23,6 +23,9 @@ spec:
         - containerPort: 3000
           hostPort: 3000
           protocol: TCP
+        env:
+#        - name: GITHUB_ORG
+#          value: <github org name>
       hostNetwork: true
       tolerations:
       - key: node-role.kubernetes.io/master
