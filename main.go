@@ -79,7 +79,7 @@ func main() {
 
 			// Handle child teams
 			if team.Parent != nil {
-				teams = append(teams, *team.Parent.Name)
+				groups = append(groups, *team.Parent.Name)
 			}
 		}
 
