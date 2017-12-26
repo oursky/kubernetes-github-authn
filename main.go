@@ -76,6 +76,11 @@ func main() {
 				}
 			}
 			groups = append(groups, *team.Name)
+
+			// Handle child teams
+			if team.Parent != nil {
+				teams = append(teams, *team.Parent.Name)
+			}
 		}
 
 		log.Printf("[Success] login as %s", *user.Login)
