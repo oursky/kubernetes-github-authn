@@ -34,7 +34,6 @@ func main() {
 		git := gitlab.NewClient(nil, tr.Spec.Token)
 		git.SetBaseURL(gitlabUrl)
 		user, _, err := git.Users.CurrentUser(nil)
-
 		if err != nil {
 			log.Println("[Error]", err.Error())
 			w.WriteHeader(http.StatusUnauthorized)
@@ -47,14 +46,20 @@ func main() {
 			})
 			return
 		}
+		projects, _, err := git.Groups.ListGroups(&gitlab.ListGroupsOptions{})
+		var groups []string
+		for _, g := range projects {
+			groups = append(groups, g.Name)
+		}
 
-		log.Printf("[Success] login as %s", user.Username)
+		log.Printf("[Success] login as %s, groups: %v", user.Username, groups)
 		w.WriteHeader(http.StatusOK)
 		trs := authentication.TokenReviewStatus{
 			Authenticated: true,
 			User: authentication.UserInfo{
 				Username: user.Username,
 				UID:      user.Username,
+				Groups:   groups,
 			},
 		}
 		json.NewEncoder(w).Encode(map[string]interface{}{

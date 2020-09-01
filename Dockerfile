@@ -1,4 +1,4 @@
-FROM centos:7
+FROM alpine:3.11.5
 
 COPY _output/main /boot
 
